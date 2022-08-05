@@ -8,7 +8,9 @@ there's some options provided so you can make little uncommon shapes of rainbow
 
 ![image](https://user-images.githubusercontent.com/19390500/183110956-a8b73ae3-718e-403e-946f-b2ca9cc1aaf3.png)
 
-can't open the program? probably no 'input.txt' file found otherwise the problem is with your OS
+### how to start?
+- clone repo in any folder and add 'input.txt' file so program can read it
+- add any text in a new file and start using program with 'cargo run' in cmd
 
 program crashed when all settings provided? probably your PC is out of memory, so restart it. anyways, error caused by buffers (can't flush, can't write) or by file system (can't write output.txt)
 
