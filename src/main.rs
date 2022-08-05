@@ -5,7 +5,8 @@ use crossterm::{
         Print,
         Stylize,
         Color
-    }
+    },
+    event::{read}
 };
 use std::io::{
     stdin,
@@ -115,4 +116,5 @@ fn main() {
         stdout(),
         Print("Checkout the result! All data was written in 'output.txt' in program's folder.")
     ).unwrap();
+    read().unwrap();
 }
