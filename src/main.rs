@@ -16,12 +16,9 @@ use std::io::{
 
 use bracket_color::prelude::HSV;
 
-use std::fs::{
-    read_to_string,
-    write
-};
+use std::fs::{OpenOptions,File,read_to_string};
 
-fn draw_text(text:&String,h:f32,s:f32,v:f32,iters:f32,rotation:u16,data:&mut String) {
+fn draw_text(text:&String,h:f32,s:f32,v:f32,iters:f32,rotation:u16,file:&mut File) {
     let mut lines = text.lines();
     let mut lines_iter = 0;
     while let Some(line) = lines.next() {
@@ -42,14 +39,14 @@ fn draw_text(text:&String,h:f32,s:f32,v:f32,iters:f32,rotation:u16,data:&mut Str
                 stdout(),
                 Print(result)
             ).unwrap();
-            data.push_str(&format!("{}",result));
+            file.write_all(&format!("{}",result).as_bytes());
         }
         queue!(
             stdout(),
             Print("\n")
         ).unwrap();
 
-        data.push_str("\n");
+        file.write(b"\n");
 
         skip += 1;
         match rotation {
@@ -66,8 +63,9 @@ fn draw_text(text:&String,h:f32,s:f32,v:f32,iters:f32,rotation:u16,data:&mut Str
         Print("\n")
     ).unwrap();
 
-    data.push_str("\n");
+    file.write(b"\n");
 
+    file.flush().unwrap();
     stdout().flush().unwrap();
 }
 
@@ -101,16 +99,19 @@ fn main() {
     stdin().read_line(&mut rainbow_rotation).unwrap();
     let rainbow_rotation = rainbow_rotation.trim().parse::<u16>().unwrap();
 
-    let mut data = String::new();
+
+    let mut file = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .open("output.txt")
+        .unwrap();
 
     for i in 0..iterations as u16 {
         let color = i as f32 / iterations;
         let saturation = 1f32;
         let value = 1f32;
-        draw_text(&input,color,saturation,value,iterations,rainbow_rotation,&mut data);
+        draw_text(&input,color,saturation,value,iterations,rainbow_rotation,&mut file);
     }
-
-    write("output.txt",data).unwrap();
 
     execute!(
         stdout(),
